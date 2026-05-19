@@ -1,7 +1,9 @@
 "use client";
 
-import { APP_NAME, APP_TAGLINE } from "@/lib/gantt/constants";
-import { ShareIcon } from "./icons";
+import { useEffect, useState } from "react";
+import { APP_NAME, APP_TAGLINE, COPY } from "@/lib/gantt/constants";
+import { prefersDownloadExport } from "@/lib/gantt/device";
+import { DownloadIcon, ShareIcon } from "./icons";
 
 interface HeaderProps {
   onShare: () => void;
@@ -9,6 +11,16 @@ interface HeaderProps {
 }
 
 export function Header({ onShare, sharing }: HeaderProps) {
+  const [isDownload, setIsDownload] = useState(true);
+
+  useEffect(() => {
+    setIsDownload(prefersDownloadExport());
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const onChange = () => setIsDownload(prefersDownloadExport());
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <div className="header">
       <div className="header-left">
@@ -25,8 +37,8 @@ export function Header({ onShare, sharing }: HeaderProps) {
           "處理中…"
         ) : (
           <>
-            <ShareIcon />
-            分享 / 儲存
+            {isDownload ? <DownloadIcon /> : <ShareIcon />}
+            {isDownload ? COPY.exportDownload : COPY.exportShare}
           </>
         )}
       </button>

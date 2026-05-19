@@ -1,9 +1,10 @@
 "use client";
 
-import { COLORS } from "@/lib/gantt/constants";
+import { COLORS, COPY } from "@/lib/gantt/constants";
 
 interface TaskModalProps {
   open: boolean;
+  mode: "add" | "edit";
   inputName: string;
   inputStart: string;
   inputEnd: string;
@@ -18,6 +19,7 @@ interface TaskModalProps {
 
 export function TaskModal({
   open,
+  mode,
   inputName,
   inputStart,
   inputEnd,
@@ -29,6 +31,8 @@ export function TaskModal({
   onColorSelect,
   onConfirm,
 }: TaskModalProps) {
+  const isEdit = mode === "edit";
+
   return (
     <div
       className={`modal-overlay ${open ? "open" : ""}`}
@@ -38,7 +42,9 @@ export function TaskModal({
     >
       <div className="modal-sheet">
         <div className="modal-handle" />
-        <div className="modal-title">新增任務</div>
+        <div className="modal-title">
+          {isEdit ? COPY.taskModalEditTitle : COPY.taskModalAddTitle}
+        </div>
 
         <div className="form-group">
           <label className="form-label" htmlFor="inputName">
@@ -99,7 +105,7 @@ export function TaskModal({
         </div>
 
         <button type="button" className="btn-confirm" onClick={onConfirm}>
-          確認新增 Confirm
+          {isEdit ? COPY.taskModalEditConfirm : COPY.taskModalAddConfirm}
         </button>
       </div>
     </div>

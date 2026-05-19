@@ -413,11 +413,30 @@
 }
 
 /* ── Task List ── */
-.gantt-app .task-list-section {
-  margin: 16px 20px 0;
-}
+  .gantt-app .task-list-section {
+    margin: 16px 20px 0;
+  }
 
-.gantt-app .section-title {
+  .gantt-app .task-list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+
+  .gantt-app .task-list-header .section-title {
+    margin-bottom: 0;
+  }
+
+  .gantt-app .task-list-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .gantt-app .section-title {
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -537,6 +556,25 @@
 .gantt-app .task-card-info {
   flex: 1;
   min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.gantt-app .task-card-info:active {
+  background: var(--surface2);
+}
+
+@media (hover: hover) {
+  .gantt-app .task-card-info:hover {
+    background: var(--surface2);
+  }
 }
 
 .gantt-app .task-card-name {

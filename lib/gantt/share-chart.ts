@@ -1,4 +1,5 @@
-import { APP_NAME } from "./constants";
+import { APP_NAME, COPY } from "./constants";
+import { prefersDownloadExport } from "./device";
 
 export async function shareChart(
   captureEl: HTMLElement,
@@ -40,7 +41,7 @@ export async function shareChart(
 
   const filename = `${displayName}_${APP_NAME}.png`;
 
-  if (navigator.share && navigator.canShare) {
+  if (!prefersDownloadExport() && navigator.share && navigator.canShare) {
     const blob = await new Promise<Blob | null>((res) =>
       final.toBlob(res, "image/png"),
     );
@@ -51,7 +52,7 @@ export async function shareChart(
           files: [file],
           title: displayName,
         });
-        return { success: true, message: "已開啟分享選單 ✓" };
+        return { success: true, message: COPY.exportShareDone };
       }
     }
   }
@@ -60,5 +61,5 @@ export async function shareChart(
   link.download = filename;
   link.href = final.toDataURL("image/png");
   link.click();
-  return { success: true, message: "圖片已下載 ✓" };
+  return { success: true, message: COPY.exportDownloadDone };
 }

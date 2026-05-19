@@ -9,6 +9,7 @@ import { DeleteIcon } from "./icons";
 interface TaskListSectionProps {
   tasks: Task[];
   onDelete: (id: number) => void;
+  onEdit: (task: Task) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onShowToast: (msg: string) => void;
 }
@@ -16,6 +17,7 @@ interface TaskListSectionProps {
 export function TaskListSection({
   tasks,
   onDelete,
+  onEdit,
   onReorder,
   onShowToast,
 }: TaskListSectionProps) {
@@ -165,25 +167,6 @@ export function TaskListSection({
     };
   }, [finishDrag]);
 
-  const onCardTouchStart = (
-    e: React.TouchEvent<HTMLDivElement>,
-    card: HTMLDivElement,
-  ) => {
-    if ((e.target as HTMLElement).closest(".btn-delete")) return;
-    if ((e.target as HTMLElement).closest(".drag-handle")) return;
-    const touch = e.touches[0];
-
-    longPressTimer.current = setTimeout(() => {
-      startDrag(card, touch.clientY, true);
-      document.addEventListener("touchmove", onTouchMove, { passive: false });
-      document.addEventListener("touchend", onTouchEnd);
-    }, 450);
-
-    const cancel = () => cancelLongPress();
-    card.addEventListener("touchend", cancel, { once: true });
-    card.addEventListener("touchmove", cancel, { once: true });
-  };
-
   const onHandleMouseDown = (
     e: React.MouseEvent<HTMLDivElement>,
     card: HTMLDivElement,
@@ -215,7 +198,12 @@ export function TaskListSection({
 
   return (
     <div className="task-list-section">
-      <div className="section-title">{COPY.taskListTitle}</div>
+      <div className="task-list-header">
+        <div className="section-title">{COPY.taskListTitle}</div>
+        {tasks.length > 0 && (
+          <span className="task-list-hint">{COPY.taskListEditHint}</span>
+        )}
+      </div>
       <div ref={listRef} id="taskList">
         {tasks.length === 0 ? (
           <div className="empty-guide">
@@ -230,7 +218,6 @@ export function TaskListSection({
                 className="task-card"
                 data-index={i}
                 data-id={t.id}
-                onTouchStart={(e) => onCardTouchStart(e, e.currentTarget)}
               >
                 <div
                   className="drag-handle"
@@ -243,16 +230,24 @@ export function TaskListSection({
                   <span />
                 </div>
                 <div className="task-card-color" style={{ background: t.color }} />
-                <div className="task-card-info">
+                <button
+                  type="button"
+                  className="task-card-info"
+                  onClick={() => onEdit(t)}
+                  aria-label={`編輯任務：${t.name}`}
+                >
                   <div className="task-card-name">{t.name}</div>
                   <div className="task-card-dates">
                     {formatDate(t.start)} → {formatDate(t.end)} · {diffDays(t.start, t.end) + 1} 天
                   </div>
-                </div>
+                </button>
                 <button
                   type="button"
                   className="btn-delete"
-                  onClick={() => onDelete(t.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(t.id);
+                  }}
                   title="刪除"
                 >
                   <DeleteIcon />

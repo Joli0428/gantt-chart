@@ -40,6 +40,7 @@ export default function GanttApp() {
   const [rangeStart, setRangeStart] = useState(initial.rangeStart);
   const [rangeEnd, setRangeEnd] = useState(initial.rangeEnd);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [selectedColor, setSelectedColor] = useState(COLORS[0].val);
   const [nextId, setNextId] = useState(initial.nextId);
   const [resetStep, setResetStep] = useState<ResetStep | null>(null);
@@ -60,6 +61,7 @@ export default function GanttApp() {
 
   const openModal = () => {
     const dates = getDefaultTaskDates();
+    setEditingTaskId(null);
     setInputName("");
     setInputStart(dates.start);
     setInputEnd(dates.end);
@@ -67,9 +69,21 @@ export default function GanttApp() {
     setModalOpen(true);
   };
 
-  const closeModal = () => setModalOpen(false);
+  const openEditModal = (task: Task) => {
+    setEditingTaskId(task.id);
+    setInputName(task.name);
+    setInputStart(task.start);
+    setInputEnd(task.end);
+    setSelectedColor(task.color);
+    setModalOpen(true);
+  };
 
-  const addTask = () => {
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingTaskId(null);
+  };
+
+  const saveTask = () => {
     const name = inputName.trim();
     if (!name) {
       showToast("請輸入任務名稱");
@@ -81,6 +95,28 @@ export default function GanttApp() {
     }
     if (inputStart > inputEnd) {
       showToast("開始日期不能晚於結束日期");
+      return;
+    }
+
+    if (inputStart < rangeStart) setRangeStart(inputStart);
+    if (inputEnd > rangeEnd) setRangeEnd(inputEnd);
+
+    if (editingTaskId !== null) {
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === editingTaskId
+            ? {
+                ...t,
+                name,
+                start: inputStart,
+                end: inputEnd,
+                color: selectedColor,
+              }
+            : t,
+        ),
+      );
+      closeModal();
+      showToast(COPY.taskUpdated);
       return;
     }
 
@@ -97,12 +133,9 @@ export default function GanttApp() {
       },
     ]);
 
-    if (inputStart < rangeStart) setRangeStart(inputStart);
-    if (inputEnd > rangeEnd) setRangeEnd(inputEnd);
-
     setSelectedColor(COLORS[tasks.length % COLORS.length].val);
     closeModal();
-    showToast("任務已新增 ✓");
+    showToast(COPY.taskAdded);
   };
 
   const deleteTask = (id: number) => {
@@ -128,6 +161,7 @@ export default function GanttApp() {
     setNextId(fresh.nextId);
     setSelectedColor(fresh.selectedColor);
     setModalOpen(false);
+    setEditingTaskId(null);
     setResetStep(null);
   };
 
@@ -187,12 +221,14 @@ export default function GanttApp() {
       <TaskListSection
         tasks={tasks}
         onDelete={deleteTask}
+        onEdit={openEditModal}
         onReorder={reorderTasks}
         onShowToast={showToast}
       />
       <div className="bottom-pad" />
       <TaskModal
         open={modalOpen}
+        mode={editingTaskId !== null ? "edit" : "add"}
         inputName={inputName}
         inputStart={inputStart}
         inputEnd={inputEnd}
@@ -202,7 +238,7 @@ export default function GanttApp() {
         onStartChange={setInputStart}
         onEndChange={setInputEnd}
         onColorSelect={setSelectedColor}
-        onConfirm={addTask}
+        onConfirm={saveTask}
       />
       <ResetProjectModal
         step={resetStep}
