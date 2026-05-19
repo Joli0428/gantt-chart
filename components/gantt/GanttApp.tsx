@@ -10,6 +10,7 @@ import {
 } from "@/lib/gantt/constants";
 import { ResetProjectModal, type ResetStep } from "./ResetProjectModal";
 import { shareChart } from "@/lib/gantt/share-chart";
+import { clampDateRange } from "@/lib/gantt/range";
 import type { Task } from "@/lib/gantt/types";
 import { Header } from "./Header";
 import { ProjectBar } from "./ProjectBar";
@@ -53,11 +54,25 @@ export default function GanttApp() {
   const { message: toastMsg, visible: toastVisible, showToast } = useToast();
 
   useEffect(() => {
-    const update = () => setWindowWidth(window.innerWidth);
+    const update = () => {
+      const w = window.innerWidth;
+      setWindowWidth((prev) => (prev === w ? prev : w));
+    };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  const applyDateRange = useCallback(
+    (start: string, end: string) => {
+      const clamped = clampDateRange(start, end);
+      setRangeStart(clamped.start);
+      setRangeEnd(clamped.end);
+      if (clamped.clamped) showToast(COPY.rangeClamped);
+      return clamped;
+    },
+    [showToast],
+  );
 
   const openModal = () => {
     const dates = getDefaultTaskDates();
@@ -98,8 +113,10 @@ export default function GanttApp() {
       return;
     }
 
-    if (inputStart < rangeStart) setRangeStart(inputStart);
-    if (inputEnd > rangeEnd) setRangeEnd(inputEnd);
+    applyDateRange(
+      inputStart < rangeStart ? inputStart : rangeStart,
+      inputEnd > rangeEnd ? inputEnd : rangeEnd,
+    );
 
     if (editingTaskId !== null) {
       setTasks((prev) =>
@@ -197,8 +214,8 @@ export default function GanttApp() {
         rangeStart={rangeStart}
         rangeEnd={rangeEnd}
         onProjectNameChange={setProjectName}
-        onRangeStartChange={setRangeStart}
-        onRangeEndChange={setRangeEnd}
+        onRangeStartChange={(v) => applyDateRange(v, rangeEnd)}
+        onRangeEndChange={(v) => applyDateRange(rangeStart, v)}
         onRequestReset={() => setResetStep(1)}
       />
       <div className="gantt-section">

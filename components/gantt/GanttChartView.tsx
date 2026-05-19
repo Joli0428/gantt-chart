@@ -3,6 +3,7 @@
 import { forwardRef } from "react";
 import type { Task } from "@/lib/gantt/types";
 import { COPY } from "@/lib/gantt/constants";
+import { MAX_CHART_DAYS } from "@/lib/gantt/range";
 import {
   addDays,
   daysFromToday,
@@ -19,9 +20,10 @@ interface GanttChartViewProps {
 
 export const GanttChartView = forwardRef<HTMLDivElement, GanttChartViewProps>(
   function GanttChartView({ tasks, rangeStart, rangeEnd, windowWidth }, ref) {
-    const totalDays = diffDays(rangeStart, rangeEnd) + 1;
-    if (totalDays < 1) return null;
+    const rawDays = diffDays(rangeStart, rangeEnd) + 1;
+    if (rawDays < 1) return null;
 
+    const totalDays = Math.min(rawDays, MAX_CHART_DAYS);
     const today = daysFromToday(0);
     const dates: string[] = [];
     for (let i = 0; i < totalDays; i++) {
