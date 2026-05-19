@@ -1,0 +1,834 @@
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface2: #f0efeb;
+  --border: #e8e6e1;
+  --text-primary: #2c2b28;
+  --text-secondary: #8a8780;
+  --text-muted: #b5b3ae;
+  --accent: #9db5a0;
+
+  --m1: #c9a99a;
+  --m2: #9db5a0;
+  --m3: #8fa8bf;
+  --m4: #c8b99a;
+  --m5: #a99bbf;
+  --m6: #a8a49e;
+  --today-line: #c4816e;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(44, 43, 40, 0.07);
+  --shadow-lg: 0 8px 32px rgba(44, 43, 40, 0.12);
+}
+
+.gantt-app * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gantt-app {
+  background: var(--bg);
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+.gantt-app .header {
+  padding: 20px 20px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.gantt-app .header-left h1 {
+  font-family: var(--font-lora), "Lora", serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.gantt-app .header-left .subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+.gantt-app .btn-download {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--text-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.gantt-app .btn-download:active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
+.gantt-app .btn-download svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gantt-app .btn-download:disabled {
+  cursor: wait;
+}
+
+  /* ── Project Info Bar ── */
+  .gantt-app .project-bar-wrap {
+    margin: 16px 20px 0;
+  }
+
+.gantt-app .project-bar {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.gantt-app .project-name-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.gantt-app .project-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.gantt-app .project-name-input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-lora), "Lora", serif;
+  font-size: 16px;
+  color: var(--text-primary);
+  outline: none;
+  text-overflow: ellipsis;
+}
+
+.gantt-app .project-name-input::placeholder {
+  color: var(--text-muted);
+}
+
+.gantt-app .date-range-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 520px) {
+  .gantt-app .project-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .gantt-app .project-name-wrap {
+    width: 100%;
+  }
+
+  .gantt-app .date-range-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .gantt-app .date-field {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gantt-app .date-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .gantt-app .date-sep {
+    margin-top: 0;
+    align-self: center;
+    flex-shrink: 0;
+  }
+}
+
+.gantt-app .date-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.gantt-app .date-input {
+  border: none;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  color: var(--text-primary);
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  outline: none;
+  width: 120px;
+}
+
+  .gantt-app .date-sep {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .gantt-app .project-bar-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+    padding: 0 2px;
+  }
+
+  .gantt-app .btn-reset-project {
+    background: none;
+    border: none;
+    font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .gantt-app .btn-reset-project:active {
+    color: var(--m1);
+  }
+
+  /* ── Gantt Container ── */
+.gantt-app .gantt-section {
+  margin: 16px 20px 0;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.gantt-app .gantt-scroll-outer {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gantt-app .gantt-scroll-outer::-webkit-scrollbar {
+  display: none;
+}
+
+.gantt-app #gantt-capture {
+  min-width: 100%;
+  background: var(--surface);
+}
+
+.gantt-app .gantt-header {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 10;
+}
+
+.gantt-app .task-col-header {
+  min-width: 110px;
+  width: 110px;
+  padding: 12px 14px;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.gantt-app .date-cols-header {
+  display: flex;
+  flex: 1;
+}
+
+.gantt-app .date-col-head {
+  flex: 1;
+  min-width: 38px;
+  text-align: center;
+  padding: 8px 2px;
+  font-size: 10px;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.gantt-app .date-col-head.today-head {
+  color: var(--today-line);
+  font-weight: 500;
+}
+
+.gantt-app .date-col-head .day-num {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.gantt-app .date-col-head.today-head .day-num {
+  color: var(--today-line);
+}
+
+.gantt-app .date-col-head .day-name {
+  font-size: 9px;
+}
+
+.gantt-app .gantt-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  min-height: 52px;
+  align-items: center;
+  position: relative;
+}
+
+.gantt-app .gantt-row:last-child {
+  border-bottom: none;
+}
+
+.gantt-app .task-name-cell {
+  min-width: 110px;
+  width: 110px;
+  padding: 10px 14px;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gantt-app .task-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gantt-app .task-name-text {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gantt-app .date-cells-row {
+  display: flex;
+  flex: 1;
+  height: 52px;
+  position: relative;
+  align-items: center;
+}
+
+.gantt-app .date-cell {
+  flex: 1;
+  min-width: 38px;
+  height: 100%;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.gantt-app .date-cell.today-cell {
+  background: rgba(196, 129, 110, 0.05);
+}
+
+.gantt-app .today-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--today-line);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  border-radius: 2px;
+}
+
+.gantt-app .gantt-bar {
+  position: absolute;
+  height: 26px;
+  border-radius: 6px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.15s;
+}
+
+.gantt-app .gantt-bar:active {
+  opacity: 0.8;
+}
+
+/* ── Add Task ── */
+.gantt-app .add-task-section {
+  margin: 12px 20px 0;
+}
+
+.gantt-app .btn-add-task {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.gantt-app .btn-add-task:active {
+  background: var(--surface2);
+}
+
+/* ── Task List ── */
+.gantt-app .task-list-section {
+  margin: 16px 20px 0;
+}
+
+.gantt-app .section-title {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  padding-left: 2px;
+}
+
+.gantt-app .task-card {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: gantt-slide-in 0.25s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+}
+
+.gantt-app .task-card.dragging {
+  opacity: 0.3;
+  box-shadow: none;
+}
+
+.gantt-app .task-card.drag-over {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(44, 43, 40, 0.13);
+}
+
+.gantt-app .drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.95;
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.03) rotate(0.8deg);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+@keyframes gantt-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gantt-app .drag-handle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+  padding: 4px 2px;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  cursor: grab;
+  touch-action: none;
+}
+
+.gantt-app .drag-handle:active,
+.gantt-app .task-card.dragging .drag-handle {
+  cursor: grabbing;
+  opacity: 0.6;
+}
+
+@media (hover: hover) {
+  .gantt-app .task-card:hover .drag-handle {
+    opacity: 0.55;
+  }
+}
+
+.gantt-app .drag-handle span {
+  display: block;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text-muted);
+}
+
+.gantt-app .drop-indicator {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: -4px 0 4px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.gantt-app .drop-indicator.active {
+  opacity: 1;
+}
+
+.gantt-app .task-card-color {
+  width: 10px;
+  height: 36px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.gantt-app .task-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.gantt-app .task-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gantt-app .task-card-dates {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.gantt-app .btn-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.gantt-app .btn-delete:active {
+  color: var(--m1);
+  background: rgba(201, 169, 154, 0.1);
+}
+
+/* ── Modal ── */
+.gantt-app .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 43, 40, 0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.gantt-app .modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.gantt-app .modal-sheet {
+  width: 100%;
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 0 20px 40px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gantt-app .modal-overlay.open .modal-sheet {
+  transform: translateY(0);
+}
+
+.gantt-app .modal-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 20px;
+}
+
+.gantt-app .modal-title {
+  font-family: var(--font-lora), "Lora", serif;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.gantt-app .form-group {
+  margin-bottom: 16px;
+}
+
+.gantt-app .form-label {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.gantt-app .form-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  font-size: 14px;
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  color: var(--text-primary);
+  background: var(--bg);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.gantt-app .form-input:focus {
+  border-color: var(--accent);
+}
+
+.gantt-app .color-picker-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gantt-app .color-chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.gantt-app .color-chip.selected {
+  border-color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.gantt-app .date-row {
+  display: flex;
+  gap: 10px;
+}
+
+.gantt-app .date-row .form-group {
+  flex: 1;
+}
+
+.gantt-app .btn-confirm {
+  width: 100%;
+  background: var(--text-primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px;
+  font-size: 15px;
+  font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s;
+}
+
+  .gantt-app .btn-confirm:active {
+    opacity: 0.8;
+  }
+
+  .gantt-app .reset-modal-title {
+    margin-bottom: 12px;
+  }
+
+  .gantt-app .reset-modal-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .gantt-app .reset-modal-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .gantt-app .reset-modal-actions button {
+    flex: 1;
+    border-radius: 50px;
+    padding: 13px;
+    font-size: 14px;
+    font-family: var(--font-noto), "Noto Sans TC", sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+
+  /* 保留／取消：視覺上最顯眼，鼓勵留下 */
+  .gantt-app .btn-reset-safe {
+    background: var(--text-primary);
+    color: #fff;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+  }
+
+  /* 繼續刪除：低調，需要刻意點選 */
+  .gantt-app .btn-reset-risk {
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 13px;
+    box-shadow: none;
+  }
+
+  .gantt-app .btn-reset-risk:active {
+    color: var(--text-secondary);
+    background: var(--surface2);
+  }
+
+  .gantt-app .reset-modal-actions button:active {
+    opacity: 0.85;
+  }
+
+  /* ── Empty State ── */
+.gantt-app .empty-state {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.gantt-app .empty-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+  .gantt-app .empty-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .gantt-app .empty-hint {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .gantt-app .empty-guide {
+    text-align: center;
+    padding: 24px 16px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border);
+  }
+
+  .gantt-app .empty-guide-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  .gantt-app .empty-guide-hint {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+.gantt-app .bottom-pad {
+  height: 40px;
+}
+
+/* ── Toast ── */
+.gantt-app .toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text-primary);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+  z-index: 200;
+  white-space: nowrap;
+}
+
+.gantt-app .toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

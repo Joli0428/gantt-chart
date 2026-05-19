@@ -1,0 +1,35 @@
+"use client";
+
+import { APP_NAME, APP_TAGLINE } from "@/lib/gantt/constants";
+import { ShareIcon } from "./icons";
+
+interface HeaderProps {
+  onShare: () => void;
+  sharing: boolean;
+}
+
+export function Header({ onShare, sharing }: HeaderProps) {
+  return (
+    <div className="header">
+      <div className="header-left">
+        <h1>{APP_NAME}</h1>
+        <div className="subtitle">{APP_TAGLINE}</div>
+      </div>
+      <button
+        type="button"
+        className="btn-download"
+        onClick={onShare}
+        disabled={sharing}
+      >
+        {sharing ? (
+          "處理中…"
+        ) : (
+          <>
+            <ShareIcon />
+            分享 / 儲存
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
