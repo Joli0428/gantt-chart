@@ -113,7 +113,6 @@ export const GanttChartView = forwardRef<HTMLDivElement, GanttChartViewProps>(
                             height: 52,
                           }}
                         >
-                          {isToday ? <div className="today-marker" /> : null}
                         </div>
                       );
                     })}
